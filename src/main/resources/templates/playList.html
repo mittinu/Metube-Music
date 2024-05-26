@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Music List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+</head>
+<body class="bg-dark">
+    <div class="p-5 mb-0 text-center bg-dark text-danger">
+        <h1 class="mb-3">Play List</h1>
+        <div th:replace="layout"></div>
+    </div>
+    <!-- <div class="container">
+        <div class="row-6" th:each="music : ${musics}">
+            <div class="card-body border-bottom">
+                <h5 class="card-title text-warning" th:text="${music.title}"></h5>
+                <p class="card-text text-white" th:text="${music.artist}"></p>
+                <a th:href="|/music/${music.id}|" class="btn btn-primary">Play</a>
+            </div>
+        </div>
+    </div> -->
+</body>
+</html>
