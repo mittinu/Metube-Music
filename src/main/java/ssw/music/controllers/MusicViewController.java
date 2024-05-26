@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import lombok.RequiredArgsConstructor;
 import ssw.music.domain.History;
 import ssw.music.domain.Music;
+import ssw.music.domain.PlayList;
 import ssw.music.dto.AddHistory;
 import ssw.music.dto.MusicListView;
 import ssw.music.services.MusicService;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RequiredArgsConstructor
@@ -19,7 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MusicViewController {
     
     private final MusicService musicService;
-    
+    // PlayList
+    List<String> playLists = new ArrayList<>(Arrays.asList("playList1", "playList2", "playList3"));
     
     // List<String> musics = new ArrayList<>(Arrays.asList("All Too Well", "Blank Space", "Love Story"));
 
@@ -32,7 +35,8 @@ public class MusicViewController {
     @GetMapping("/musiclist")
     public String getMusics(Model model) {
         List<MusicListView> musics = musicService.findAll().stream().map(MusicListView::new).toList();
-        model.addAttribute("musics", musics);            
+        model.addAttribute("musics", musics);    
+        model.addAttribute("playlists", playLists);        
         return "musicList";
     }
 
@@ -55,11 +59,6 @@ public class MusicViewController {
         return "main";
     }
 
-    @GetMapping("/playlist")
-    public String getPlayList(Model model) {
-        return "playList";
-    }
-
     @GetMapping("/history")
     public String getHistory(Model model) {
 
@@ -68,5 +67,14 @@ public class MusicViewController {
         model.addAttribute("histories", histories);
 
         return "history";
+    }
+
+    @GetMapping("/playlist")
+    public String getPlayList(Model model) {
+        List<PlayList> playLists = musicService.getPlayList().stream().toList();
+
+        model.addAttribute("playLists", playLists);
+
+        return "playList";
     }
 }

@@ -6,15 +6,18 @@ import java.util.List;
 
 import ssw.music.domain.History;
 import ssw.music.domain.Music;
+import ssw.music.domain.PlayList;
 import ssw.music.dto.AddHistory;
 import ssw.music.repository.HistoryRepository;
 import ssw.music.repository.MusicRepository;
+import ssw.music.repository.PlayListRepository;
 
 @RequiredArgsConstructor
 @Service
 public class MusicService {
     private final MusicRepository musicRepository;
     private final HistoryRepository historyRepository;
+    private final PlayListRepository playListRepository;
     private int loginId = 99;
 
     public List<Music> findAll() {
@@ -36,6 +39,10 @@ public class MusicService {
 
     public List<History> findHistory() {
         return historyRepository.findAll();
+    }
+
+    public List<PlayList> getPlayList() {
+        return playListRepository.findAll();
     }
 
     
