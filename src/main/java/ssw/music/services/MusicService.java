@@ -44,6 +44,4 @@ public class MusicService {
     public List<PlayList> getPlayList() {
         return playListRepository.findAll();
     }
-
-    
 }

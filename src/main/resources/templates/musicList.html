@@ -33,14 +33,24 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <div th:each="playlist : ${playlists}">
-                                <button th:text="${playlist}"></button>
+                            <!-- <form th:action="@{/addplaylistitem}"  th:object="${playListItem}" method="post">
+                                <div style="margin: 5px;" th:each="playlist : ${playlists}">
+                                    <input type="text" th:field="*{id}"/>
+                                    <button type="submit" class="btn btn-info" th:text="${playlist.title}" ></button>
+                                </div>
+                            </form> -->
+                            <div style="margin: 5px;" th:each="playlist : ${playlists}">
+                                <form th:action="@{/addplaylistitem/{playlistId}(playlistId=${playlist.id})}" th:object="${playListItem}" method="post">
+                                    <!-- Hidden input field to set playListItem.id to playlist.id -->
+                                    <input type="hidden" th:field="*{id}" />
+                                    <button type="submit" class="btn btn-info" th:text="${playlist.title}"></button>
+                                </form>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <!-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
+                        </div> -->
                     </div>
                     </div>
                 </div>
