@@ -160,7 +160,28 @@ public class MusicViewController {
 
         musicService.deletePlayList(playListId);
 
+        // 플레이리스트를 삭제하면 그 안에 포함되어 있는 음악들도 PlayListItem 테이블에서 삭제해야함..
+        List<PlayListItem> playListItems = playListItemRepository.findAll().stream().toList();
+
+        for (PlayListItem playListItem : playListItems) {
+            if (playListItem.getPlayListId() == playListId)
+            {
+                playListItemRepository.deleteById(playListItem.getId());
+            }
+        }
+
         return "redirect:/playlists";
     }
+
+    @GetMapping("/deleteplaylistitem/{playListId}/{musicId}")
+    public String deletePlayListItem(RedirectAttributes redirect, @PathVariable("playListId") int playListId, @PathVariable("musicId") int musicId, Model model) {
+
+         musicService.deletePlayListItem(playListId, musicId);
+
+         redirect.addAttribute("id", playListId);
+
+        return "redirect:/playlist/{id}";
+    }
+    
     
 }

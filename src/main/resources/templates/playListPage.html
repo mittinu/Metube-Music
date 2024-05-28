@@ -15,8 +15,20 @@
     <div class="container">
         <div class="row-6" th:each="music : ${musics}">
             <div class="card-body border-bottom">
-                <h4 class="card-title text-warning" th:text="${music.title}"></h4>
-                <h5 class="card-text text-white" th:text="${music.artist}"></h5>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-9">
+                            <h4 class="card-title text-warning" th:text="${music.title}"></h4>
+                            <h5 class="card-text text-white" th:text="${music.artist}"></h5>
+                        </div>
+                        <div class="col-3">
+                            <form th:action="@{/deleteplaylistitem/{playListId}/{musicId}(playListId = ${playList.id}, musicId = ${music.id})}" method="get">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <button style="margin-top: 15px;" type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
