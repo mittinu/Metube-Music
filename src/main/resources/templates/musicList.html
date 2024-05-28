@@ -20,14 +20,14 @@
                 <a th:href="|/music/${music.id}|" class="btn btn-primary">Play</a>
                 
                 <!-- 모달을 실행할 버튼 -->
-                <button th:text="${music.id}" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal" th:attr="onclick=|openModal('${music.id}')|">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" th:attr="data-bs-target=${'#exampleModal'+ music.id}" th:data-bs-id="${music.id}">
                     Add to PlayList
                 </button>
             
                 <!-- 모달 -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                    <div class="modal-content">
+                <div class="modal fade"  th:attr="id='exampleModal' + ${music.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" >
+                    <div class="modal-content" th:id="exampleModal+${music.id}">
                         <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Play List</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -40,10 +40,9 @@
                                 </div>
                             </form> -->
                             <div style="margin: 5px;" th:each="playlist : ${playlists}">
-                                <form th:action="@{/addplaylistitem/{playlistId}/{musicId}(playlistId=${playlist.id}, musicId=${music.id})}" th:object="${playListItem}" method="post">
+                                <form  th:action="@{/addplaylistitem/{playlistId}/{musicId}(playlistId=${playlist.id}, musicId=${music.id})}" th:object="${playListItem}" method="post">
                                     <!-- Hidden input field to set playListItem.id to playlist.id -->
                                     <input type="hidden" th:field="*{id}" />
-                                    <p th:text="${music.id}"></p>
                                     <button type="submit" class="btn btn-info" th:text="${playlist.title}"></button>
                                 </form>
                             </div>
