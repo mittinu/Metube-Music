@@ -13,9 +13,9 @@
         <div th:replace="layout"></div>
     </div>
     <div class="container">
-        <div class="row-6" th:each="playList : ${playLists}">
+        <div class="row-6" th:each="playListView : ${playListViews}">
             <div class="card-body border-bottom">
-                <h4 class="card-title text-warning" th:text="${playList.musicId}"></h4>
+                <h4 class="card-title text-warning" th:text="${playListViews.musicTitle}"></h4>
                 <!-- <h5 class="card-text text-white" th:text="${playList.memberId}"></h5> -->
             </div>
         </div>

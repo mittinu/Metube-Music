@@ -14,6 +14,8 @@ import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
 import ssw.music.dto.MusicListView;
 import ssw.music.dto.PlayListRequest;
+import ssw.music.dto.PlayListView;
+import ssw.music.interfaces.IPlayListView;
 import ssw.music.repository.PlayListItemRepository;
 import ssw.music.repository.PlayListRepository;
 import ssw.music.services.MusicService;
@@ -104,9 +106,9 @@ public class MusicViewController {
     public String getPlayList(@PathVariable("id") int id, Model model) {
         
         // 특정 플레이리스트 페이지를 보여주는 코드..
-        List<PlayListItem> playLists = playListItemRepository.findAll().stream().filter(p -> p.getPlayListId() == id).toList();
-
-        model.addAttribute("playLists", playLists);
+        //List<PlayListItem> playLists = playListItemRepository.findAll().stream().filter(p -> p.getPlayListId() == id).toList();
+        List<PlayListView> playListViews = playListItemRepository.playListViews(id);
+        model.addAttribute("playListViews", playListViews);
 
         return "playListPage";
     }
