@@ -28,7 +28,7 @@ public class PlayList {
         this.memberId = memeberId;
     }
 
-    protected PlayList()
+    public PlayList()
     {
 
     }

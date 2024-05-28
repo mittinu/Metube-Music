@@ -15,16 +15,12 @@ import ssw.music.dto.AddHistory;
 import ssw.music.dto.MusicListView;
 import ssw.music.dto.PlayListMusic;
 import ssw.music.dto.PlayListRequest;
-import ssw.music.dto.PlayListView;
-import ssw.music.interfaces.IPlayListView;
 import ssw.music.repository.PlayListItemRepository;
 import ssw.music.repository.PlayListRepository;
 import ssw.music.services.MusicService;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import java.util.Optional;
 
 
 
@@ -108,7 +104,6 @@ public class MusicViewController {
     public String getPlayList(@PathVariable("id") int id, Model model) {
         
         // 특정 플레이리스트 페이지를 보여주는 코드..
-        //List<PlayListItem> playLists = playListItemRepository.findAll().stream().filter(p -> p.getPlayListId() == id).toList();
         List<PlayListItem> playListItems = playListItemRepository.findAll().stream().
                 filter(p -> p.getPlayListId() == id).toList();
 
@@ -118,19 +113,42 @@ public class MusicViewController {
             musics.add(musicService.findById(item.getMusicId()));
         }
 
+        // 특정 플레이리스트에 들어가면 해당 플레이리스트 타이틀이 뜨도록..
+        PlayList playList = new PlayList();
+        List<PlayList> playLists = playListRepository.findAll().stream().filter(p -> p.getId() == id).toList();
+
+        for (PlayList pl : playLists) {
+            if (pl.getId() == id)
+            {
+                playList = pl;
+            }
+        }
+
+        model.addAttribute("playList", playList);
         model.addAttribute("musics", musics);
 
         return "playListPage";
     }
 
     @PostMapping("/addplaylistitem/{id}/{musicId}")
-    public String addPlayListItem(@PathVariable("id") int id, @PathVariable("musicId") int musicId, @ModelAttribute("playListItem") PlayListItem playListItem) {
-        
+    public String addPlayListItem(@PathVariable("id") int playListId, @PathVariable("musicId") int musicId, @ModelAttribute("playListItem") PlayListItem playListItem) {
+        Boolean isAlreadyInPlayList = false;
         // musicList.html 에서 input th:field 와 th:value 가 둘 다 적용이 되지 않아 일단 이렇게 함..
-        PlayListItem item = new PlayListItem(id, musicId);
+        PlayListItem item = new PlayListItem(playListId, musicId);
 
-        playListItemRepository.save(item);
-        
+        // PlayListItem 테이블에서 item 과 playListId 와 musicId 가 모두 같은 것이 있는지 보면 됨..
+        // List<PlayList> playLists = playListRepository.findAll().stream().filter(p -> p.getId() == playListId).toList();
+
+        List<PlayListItem> playListItems = playListItemRepository.findAll().stream().filter(p -> (p.getPlayListId() == playListId) && (p.getMusicId() == musicId)).toList();
+        if (playListItems.size() == 0)
+        {
+            playListItemRepository.save(item);
+        }
+        else
+        {
+            //
+        }
+
         return "redirect:/musiclist";
     }
     

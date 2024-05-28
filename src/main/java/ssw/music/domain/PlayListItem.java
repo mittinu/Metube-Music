@@ -23,9 +23,9 @@ public class PlayListItem {
     // List<Music> 을 담을 컬럼도 필요함..
 
     @Builder
-    public PlayListItem(int playListId, int memeberId) {
+    public PlayListItem(int playListId, int musicId) {
         this.playListId = playListId;
-        this.musicId = memeberId;
+        this.musicId = musicId;
     }
 
     public PlayListItem()
