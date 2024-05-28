@@ -34,7 +34,7 @@
                 <a th:with="url=@{'/playlist/' + ${playList.id}}" th:href="${url}" style="text-decoration: none;">
                     <div class="card-body border-bottom" th:with="playListId = ${playList.id}">
                         <h4 class="card-title text-warning" th:text="${playList.title}"></h4>
-                        <h5 class="card-text text-white" th:text="${playList.memberId}"></h5>
+                        <h5 class="card-text text-white" th:text="|created by ${playList.memberId}|"></h5>
                     </div>
                 </a>
             </div>

@@ -13,6 +13,7 @@ import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
 import ssw.music.dto.MusicListView;
+import ssw.music.dto.PlayListMusic;
 import ssw.music.dto.PlayListRequest;
 import ssw.music.dto.PlayListView;
 import ssw.music.interfaces.IPlayListView;
@@ -48,6 +49,7 @@ public class MusicViewController {
         List<MusicListView> musics = musicService.findAll().stream().map(MusicListView::new).toList();
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
         PlayListItem playListItem = new PlayListItem();
+        PlayListMusic playListMusic = new PlayListMusic();
         model.addAttribute("musics", musics);    
         model.addAttribute("playlists", playLists);
         model.addAttribute("playListItem", playListItem);       
@@ -107,17 +109,25 @@ public class MusicViewController {
         
         // 특정 플레이리스트 페이지를 보여주는 코드..
         //List<PlayListItem> playLists = playListItemRepository.findAll().stream().filter(p -> p.getPlayListId() == id).toList();
-        List<PlayListView> playListViews = playListItemRepository.playListViews(id);
-        model.addAttribute("playListViews", playListViews);
+        List<PlayListItem> playListItems = playListItemRepository.findAll().stream().
+                filter(p -> p.getPlayListId() == id).toList();
+
+        List<Music> musics = new ArrayList<Music>();
+
+        for (PlayListItem item : playListItems) {
+            musics.add(musicService.findById(item.getMusicId()));
+        }
+
+        model.addAttribute("musics", musics);
 
         return "playListPage";
     }
 
-    @PostMapping("/addplaylistitem/{id}")
-    public String addPlayListItem(@PathVariable("id") int id, @ModelAttribute("playListItem") PlayListItem playListItem) {
+    @PostMapping("/addplaylistitem/{id}/{musicId}")
+    public String addPlayListItem(@PathVariable("id") int id, @PathVariable("musicId") int musicId, @ModelAttribute("playListItem") PlayListItem playListItem) {
         
         // musicList.html 에서 input th:field 와 th:value 가 둘 다 적용이 되지 않아 일단 이렇게 함..
-        PlayListItem item = new PlayListItem(id, musicService.getLoginId());
+        PlayListItem item = new PlayListItem(id, musicId);
 
         playListItemRepository.save(item);
         

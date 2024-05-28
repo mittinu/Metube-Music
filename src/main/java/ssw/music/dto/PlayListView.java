@@ -8,7 +8,7 @@ import ssw.music.interfaces.IPlayListView;
 
 @Getter
 @Setter
-public class PlayListView implements IPlayListView{
+public class PlayListView {
     private final int musicId;
     private final String musicTitle;
     private final String artist;
