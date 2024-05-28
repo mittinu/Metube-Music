@@ -2,13 +2,13 @@ package ssw.music.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import lombok.RequiredArgsConstructor;
 import ssw.music.domain.History;
 import ssw.music.domain.Music;
@@ -23,9 +23,6 @@ import ssw.music.repository.PlayListRepository;
 import ssw.music.services.MusicService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-
 
 @RequiredArgsConstructor
 @Controller
@@ -153,9 +150,17 @@ public class MusicViewController {
             redirect.addAttribute("isAlreadyContains", "true");
         }
 
-        
-
         return "redirect:/musiclist";
+    }
+
+    // api를 사용한 통신의 경우에는 @DeleteMapping을 통한 삭제가 가능하지만 form 태그나 uri로 직접 접근하는 경우에는 @DeleteMapping 사용이 불가..
+    // 이때 hidden 타입의 input 태그를 이용하면 가능하긴함..
+    @GetMapping("/deleteplaylist/{playListId}")
+    public String deletePlayList(@PathVariable("playListId") int playListId, Model model) {
+
+        musicService.deletePlayList(playListId);
+
+        return "redirect:/playlists";
     }
     
 }

@@ -44,4 +44,8 @@ public class MusicService {
     public List<PlayList> getPlayList() {
         return playListRepository.findAll();
     }
+
+    public void deletePlayList(int id) {
+        playListRepository.deleteById(id);
+    }
 }

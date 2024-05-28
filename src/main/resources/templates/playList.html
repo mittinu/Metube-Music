@@ -33,15 +33,27 @@
             <div class="row-6" id="playListBox" th:each="playList : ${playLists}">
                 <a th:with="url=@{'/playlist/' + ${playList.id}}" th:href="${url}" style="text-decoration: none;">
                     <div class="card-body border-bottom" th:with="playListId = ${playList.id}">
-                        <h4 class="card-title text-warning" th:text="${playList.title}"></h4>
-                        <h5 class="card-text text-white" th:text="|created by ${playList.memberId}|"></h5>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-9">
+                                    <h4 class="card-title text-warning" th:text="${playList.title}"></h4>
+                                    <h5 class="card-text text-white" th:text="|created by ${playList.memberId}|"></h5>
+                                </div>
+                                <div class="col-3">
+                                    <form th:action="@{/deleteplaylist/{playListId}(playListId = ${playList.id})}" method="get">
+                                        <input type="hidden" name="_method" value="DELETE" />
+                                        <button style="margin-top: 15px;" type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
         </form>
         <div class="row-6" style="margin-top: 10px;">
             <form th:action="@{/addplaylist}"  th:object="${playListRequest}" method="post">
-                <button id="button" type="button" class="btn btn-danger" onclick="showInputBox()">Add PlayList</button>
+                <button id="button" type="button" class="btn btn-primary" onclick="showInputBox()">Add PlayList</button>
                 <input type="text" id="newplaylist" style="display: none;" th:field="*{title}"/>
                 <button id="confirmBtn" type="submit" class="btn btn-success" style="display: none;" onclick="hideInputBox()">Confirm</button>
             </form>
