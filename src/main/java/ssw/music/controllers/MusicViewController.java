@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import lombok.RequiredArgsConstructor;
 import ssw.music.domain.History;
 import ssw.music.domain.Music;
@@ -41,11 +44,12 @@ public class MusicViewController {
     }
 
     @GetMapping("/musiclist")
-    public String getMusics(Model model) {
+    public String getMusics(@RequestParam(value = "isAlreadyContains", required=false) String isAlreadyContains, Model model) {
         List<MusicListView> musics = musicService.findAll().stream().map(MusicListView::new).toList();
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
         PlayListItem playListItem = new PlayListItem();
         PlayListMusic playListMusic = new PlayListMusic();
+        model.addAttribute("isAlreadyContains", isAlreadyContains);
         model.addAttribute("musics", musics);    
         model.addAttribute("playlists", playLists);
         model.addAttribute("playListItem", playListItem);       
@@ -131,7 +135,7 @@ public class MusicViewController {
     }
 
     @PostMapping("/addplaylistitem/{id}/{musicId}")
-    public String addPlayListItem(@PathVariable("id") int playListId, @PathVariable("musicId") int musicId, @ModelAttribute("playListItem") PlayListItem playListItem) {
+    public String addPlayListItem(RedirectAttributes redirect, @PathVariable("id") int playListId, @PathVariable("musicId") int musicId, @ModelAttribute("playListItem") PlayListItem playListItem) {
         Boolean isAlreadyInPlayList = false;
         // musicList.html 에서 input th:field 와 th:value 가 둘 다 적용이 되지 않아 일단 이렇게 함..
         PlayListItem item = new PlayListItem(playListId, musicId);
@@ -146,8 +150,10 @@ public class MusicViewController {
         }
         else
         {
-            //
+            redirect.addAttribute("isAlreadyContains", "true");
         }
+
+        
 
         return "redirect:/musiclist";
     }
