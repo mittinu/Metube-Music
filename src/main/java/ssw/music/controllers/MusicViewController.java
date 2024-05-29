@@ -81,9 +81,9 @@ public class MusicViewController {
         
         // History 클래스의 musicId 와 memberId 를 통해 객체 넘겨주기..
         for (History history : histories) {
-            HistoryView historyView = new HistoryView(0, getMain(), getMain(), getMain());
-
+            HistoryView historyView = new HistoryView(0, 0, getMain(), getMain(), getMain());
             historyView.setId(history.getId());
+            historyView.setMusicId(history.getMusicId());
             historyView.setMusicTitle(musicService.findById(history.getMusicId()).getTitle());
             historyView.setArtist(musicService.findById(history.getMusicId()).getArtist());
             historyView.setMember(musicService.findMemberById(history.getMemberId()).getName());
@@ -184,8 +184,8 @@ public class MusicViewController {
     // 이때 hidden 타입의 input 태그를 이용하면 가능하긴함..
     @GetMapping("/deleteplaylist/{playListId}")
     public String deletePlayList(@PathVariable("playListId") int playListId, Model model) {
-
         musicService.deletePlayList(playListId);
+        
 
         // 플레이리스트를 삭제하면 그 안에 포함되어 있는 음악들도 PlayListItem 테이블에서 삭제해야함..
         List<PlayListItem> playListItems = playListItemRepository.findAll().stream().toList();

@@ -13,7 +13,9 @@
     <div class="container">
         <div class="row-6" th:each="historyView : ${historyViews}">
             <div class="card-body border-bottom">
-                <h5 class="card-title text-warning" th:text="|${historyView.musicTitle}|"></h5>
+                    <a th:href="|/music/${historyView.musicId}|">
+                        <h5 class="card-title text-warning" th:text="|${historyView.musicTitle}|"></h5>
+                    </a>
                 <h6 class="card-text text-white" th:text="|${historyView.artist}|"></h6>
                 <p class="card-text text-white" th:text="|-- ${historyView.member} --|"></p>
             </div>
