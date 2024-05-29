@@ -30,17 +30,17 @@
     </div>
     <div class="container">
         <form>
-            <div class="row-6" id="playListBox" th:each="playList : ${playLists}">
-                <a th:with="url=@{'/playlist/' + ${playList.id}}" th:href="${url}" style="text-decoration: none;">
-                    <div class="card-body border-bottom" th:with="playListId = ${playList.id}">
+            <div class="row-6" id="playListBox" th:each="playListMemberNameView : ${playListMemberNameViews}">
+                <a th:with="url=@{'/playlist/' + ${playListMemberNameView.playListId}}" th:href="${url}" style="text-decoration: none;">
+                    <div class="card-body border-bottom" th:with="playListId = ${playListMemberNameView.playListId}">
                         <div class="container">
                             <div class="row">
                                 <div class="col-9">
-                                    <h4 class="card-title text-warning" th:text="${playList.title}"></h4>
-                                    <h5 class="card-text text-white" th:text="|created by ${playList.memberId}|"></h5>
+                                    <h4 class="card-title text-warning" th:text="${playListMemberNameView.playListTitle}"></h4>
+                                    <h5 class="card-text text-white" th:text="|created by ${playListMemberNameView.memberName}|"></h5>
                                 </div>
                                 <div class="col-3">
-                                    <form th:action="@{/deleteplaylist/{playListId}(playListId = ${playList.id})}" method="get">
+                                    <form th:action="@{/deleteplaylist/{playListMemberNameViewId}(playListMemberNameViewId = ${playListMemberNameView.playListId})}" method="get">
                                         <input type="hidden" name="_method" value="DELETE" />
                                         <button style="margin-top: 15px;" type="submit" class="btn btn-danger">Delete</button>
                                     </form>

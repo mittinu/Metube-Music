@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import ssw.music.domain.History;
+import ssw.music.domain.Member;
 import ssw.music.domain.Music;
 import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
 import ssw.music.repository.HistoryRepository;
+import ssw.music.repository.MemberRepository;
 import ssw.music.repository.MusicRepository;
 import ssw.music.repository.PlayListItemRepository;
 import ssw.music.repository.PlayListRepository;
@@ -21,7 +23,9 @@ public class MusicService {
     private final HistoryRepository historyRepository;
     private final PlayListRepository playListRepository;
     private final PlayListItemRepository playListItemRepository;
-    private int loginId = 99;
+    private final MemberRepository memberRepository;
+
+    private int loginId = 19;
 
     public List<Music> findAll() {
         return musicRepository.findAll();
@@ -29,6 +33,15 @@ public class MusicService {
 
     public Music findById(int id) {
         return musicRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
+    }
+
+    public List<Member> findMembers() {
+        return memberRepository.findAll();
+    }
+
+    public Member findMemberById(int id) {
+        return memberRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
     }
 
@@ -46,6 +59,11 @@ public class MusicService {
 
     public List<PlayList> getPlayList() {
         return playListRepository.findAll();
+    }
+
+    public PlayList getPlayListById(int id) {
+        return playListRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("not found: " + id));
     }
 
     public void deletePlayList(int id) {

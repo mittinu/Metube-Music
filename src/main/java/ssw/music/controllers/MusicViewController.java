@@ -15,7 +15,9 @@ import ssw.music.domain.Music;
 import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
+import ssw.music.dto.HistoryView;
 import ssw.music.dto.MusicListView;
+import ssw.music.dto.PlayListMemberNameView;
 import ssw.music.dto.PlayListMusic;
 import ssw.music.dto.PlayListRequest;
 import ssw.music.repository.PlayListItemRepository;
@@ -31,8 +33,6 @@ public class MusicViewController {
     private final MusicService musicService;
     private final PlayListRepository playListRepository;
     private final PlayListItemRepository playListItemRepository;
-    
-    // List<String> musics = new ArrayList<>(Arrays.asList("All Too Well", "Blank Space", "Love Story"));
 
 
     @GetMapping("/playmusic")
@@ -77,7 +77,22 @@ public class MusicViewController {
 
         List<History> histories = musicService.findHistory().stream().toList().reversed();
 
-        model.addAttribute("histories", histories);
+        List<HistoryView> historyViews = new ArrayList<HistoryView>();
+        
+        // History 클래스의 musicId 와 memberId 를 통해 객체 넘겨주기..
+        for (History history : histories) {
+            HistoryView historyView = new HistoryView(0, getMain(), getMain(), getMain());
+
+            historyView.setId(history.getId());
+            historyView.setMusicTitle(musicService.findById(history.getMusicId()).getTitle());
+            historyView.setArtist(musicService.findById(history.getMusicId()).getArtist());
+            historyView.setMember(musicService.findMemberById(history.getMemberId()).getName());
+
+            historyViews.add(historyView);
+        }
+
+
+        model.addAttribute("historyViews", historyViews);
 
         return "history";
     }
@@ -86,7 +101,19 @@ public class MusicViewController {
     public String getPlayLists(Model model, PlayListRequest playListRequest) {
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
 
-        model.addAttribute("playLists", playLists);
+        List<PlayListMemberNameView> playListMemberNameViews = new ArrayList<PlayListMemberNameView>();
+
+        // 플레이리스트 페이지에서 플레이리스트 이름, 플레이리스트 만든 사람 보여주기 위한 작업..
+        for (PlayList playList : playLists) {
+            PlayListMemberNameView playListMemberNameView = new PlayListMemberNameView(0, getMain(), getMain());
+            playListMemberNameView.setPlayListId(playList.getId());
+            playListMemberNameView.setPlayListTitle(musicService.getPlayListById(playList.getId()).getTitle());
+            playListMemberNameView.setMemberName(musicService.findMemberById(playList.getMemberId()).getName());
+
+            playListMemberNameViews.add(playListMemberNameView);
+        }
+
+        model.addAttribute("playListMemberNameViews", playListMemberNameViews);
         model.addAttribute("playListRequest", playListRequest);
 
         return "playList";

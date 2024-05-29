@@ -11,10 +11,11 @@
         <div th:replace="layout"></div>
     </div>
     <div class="container">
-        <div class="row-6" th:each="history : ${histories}">
+        <div class="row-6" th:each="historyView : ${historyViews}">
             <div class="card-body border-bottom">
-                <h5 class="card-title text-warning" th:text="|Music ID : ${history.musicId}|"></h5>
-                <p class="card-text text-white" th:text="|Member ID : ${history.memberId}|"></p>
+                <h5 class="card-title text-warning" th:text="|${historyView.musicTitle}|"></h5>
+                <h6 class="card-text text-white" th:text="|${historyView.artist}|"></h6>
+                <p class="card-text text-white" th:text="|-- ${historyView.member} --|"></p>
             </div>
         </div>
     </div>
