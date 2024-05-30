@@ -3,6 +3,11 @@ package ssw.music.services;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Optional;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import ssw.music.domain.History;
 import ssw.music.domain.Member;
@@ -10,6 +15,7 @@ import ssw.music.domain.Music;
 import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
+import ssw.music.dto.BestMusic;
 import ssw.music.dto.CurrentLoginMember;
 import ssw.music.repository.HistoryRepository;
 import ssw.music.repository.MemberRepository;
@@ -98,5 +104,61 @@ public class MusicService {
         currentLoginMember.setCurrentLoginName(loginName);
 
         return currentLoginMember;
+    }
+
+    public List<BestMusic> getBestMusics() {
+        
+        // (음악아이디, 개수)의 형식으로 가장 많은 개수를 가진 음악 3개를 뽑는거..
+        Map<Integer, Integer> historyCount = new HashMap<Integer, Integer>();
+        
+        List<History> histories = historyRepository.findAll();
+
+        List<BestMusic> bestMusics = new ArrayList<BestMusic>();
+
+        for (int i = 0; i < histories.size(); i++) {
+            if (historyCount.containsKey(histories.get(i).getMusicId()))
+            {
+                historyCount.put(histories.get(i).getMusicId(), historyCount.get(histories.get(i).getMusicId()) + 1);
+            }
+            else
+            {
+                historyCount.put(histories.get(i).getMusicId(), 1);
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+
+            if (historyCount.size() == 0)
+            {
+                break;
+            }
+
+            int maxCountMusicId = 0;
+
+            Iterator<Map.Entry<Integer, Integer>> iterator = historyCount.entrySet().iterator();
+
+            while (iterator.hasNext())
+            {
+                Map.Entry<Integer, Integer> entry = iterator.next();
+
+                if (maxCountMusicId == 0 || entry.getValue().compareTo(maxCountMusicId) > 0) {
+                    maxCountMusicId = entry.getKey();
+                }
+            }
+
+            BestMusic bestMusic = new BestMusic();
+            bestMusic.setMusicId(maxCountMusicId);
+            bestMusic.setMusicTitle(musicRepository.findById(maxCountMusicId)
+            .orElseThrow(() -> new IllegalArgumentException("not found: ")).getTitle());
+            bestMusic.setArtist(musicRepository.findById(maxCountMusicId)
+            .orElseThrow(() -> new IllegalArgumentException("not found: ")).getArtist());
+
+            bestMusics.add(bestMusic);
+            
+            // 가장 높은거 삭제..
+            historyCount.remove(maxCountMusicId);
+        } 
+
+        return bestMusics;
     }
 }

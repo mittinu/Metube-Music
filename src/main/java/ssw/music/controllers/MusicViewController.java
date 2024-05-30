@@ -16,6 +16,7 @@ import ssw.music.domain.Music;
 import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
+import ssw.music.dto.BestMusic;
 import ssw.music.dto.CurrentLoginMember;
 import ssw.music.dto.HistoryView;
 import ssw.music.dto.LoginMemberRequest;
@@ -109,6 +110,7 @@ public class MusicViewController {
     public String getMain(Model model, LoginMemberRequest loginMember) {
         Boolean isLoginPage = true;
         List<Member> members = musicService.findMembers().stream().toList();
+        List<BestMusic> bestMusics = musicService.getBestMusics();
 
         int currentLoginId = musicService.getLoginId();
 
@@ -119,6 +121,8 @@ public class MusicViewController {
         model.addAttribute("currentLoginId", currentLoginId);
 
         model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
+        // model.addAttribute("bestMusics", musicService.getBestMusics());
+        model.addAttribute("bestMusics", bestMusics);
 
         return "main";
     }

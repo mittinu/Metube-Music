@@ -10,5 +10,34 @@
         <h1 class="mb-3">Main Page</h1>
         <div th:replace="layout(members=${members}, isLoginPage=${isLoginPage}, loginMember=${loginMember}, currentLoginId=${currentLoginId}, currentLoginName=${currentLoginName})"></div>
     </div>
+    <div class="container">
+        <div class="row border-bottom">
+            <div class="col-4" style="color: aliceblue;"><h2>Welcome to</h2><h1 style="color: crimson;">Metube Music!!</h1></div>
+            <div class="col-4"></div>
+            <div class="col-4 text-center" style="background-color: darkkhaki; margin-bottom: 20px;">
+                <h1 style="margin-bottom: 30px;">Best Musics</h1>
+                <div th:each="music : ${bestMusics}">
+                    <h2 th:text="${music.musicTitle}"></h2>
+                    <h4 th:text="|by ${music.artist}|"></h4>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="row" style="margin-top: 20px;">
+            <div class="col-4"></div>
+            <div class="col-4" style="color: aliceblue;"><a href="/"><h3>1. BestMusic</h3></a></div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-4"></div>
+            <div class="col-4" style="color: aliceblue;"><a href="/"><h4>2. BestMusic</h4></a></div>
+            <div class="col-4"></div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-4"></div>
+            <div class="col-4" style="color: aliceblue;"><a href="/"><h5>3. BestMusic</h5></a></div>
+            <div class="col-4"></div>
+        </div> -->
+    </div>
 </body>
 </html>
