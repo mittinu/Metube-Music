@@ -8,7 +8,7 @@
 <body class="bg-dark">
     <div class="p-5 mb-0 text-center bg-dark text-danger">
         <h1 class="mb-3">Main Page</h1>
-        <div th:replace="layout"></div>
+        <div th:replace="layout(members=${members}, isLoginPage=${isLoginPage}, loginMember=${loginMember}, currentLoginId=${currentLoginId}, currentLoginName=${currentLoginName})"></div>
     </div>
 </body>
 </html>

@@ -11,20 +11,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import lombok.RequiredArgsConstructor;
 import ssw.music.domain.History;
+import ssw.music.domain.Member;
 import ssw.music.domain.Music;
 import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
+import ssw.music.dto.CurrentLoginMember;
 import ssw.music.dto.HistoryView;
+import ssw.music.dto.LoginMemberRequest;
 import ssw.music.dto.MusicListView;
 import ssw.music.dto.PlayListMemberNameView;
 import ssw.music.dto.PlayListMusic;
 import ssw.music.dto.PlayListRequest;
+import ssw.music.repository.MemberRepository;
 import ssw.music.repository.PlayListItemRepository;
 import ssw.music.repository.PlayListRepository;
 import ssw.music.services.MusicService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RequiredArgsConstructor
 @Controller
@@ -33,6 +39,7 @@ public class MusicViewController {
     private final MusicService musicService;
     private final PlayListRepository playListRepository;
     private final PlayListItemRepository playListItemRepository;
+    private final MemberRepository memberRespository;
 
 
     @GetMapping("/playmusic")
@@ -40,8 +47,25 @@ public class MusicViewController {
         return "playingPage";
     }
 
+    @GetMapping("/getLoginId/{id}")
+    public String getLoginId(@RequestParam String param) {
+        return new String();
+    }
+
+    @GetMapping("/postLoginId/{id}")
+    public String postMethodName(@PathVariable("id") int loginId) {
+        //TODO: process POST request
+        
+        musicService.setLoginId(loginId);
+
+        return "redirect:/";
+    }
+    
+    
+
     @GetMapping("/musiclist")
     public String getMusics(@RequestParam(value = "isAlreadyContains", required=false) String isAlreadyContains, Model model) {
+
         List<MusicListView> musics = musicService.findAll().stream().map(MusicListView::new).toList();
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
         PlayListItem playListItem = new PlayListItem();
@@ -49,7 +73,8 @@ public class MusicViewController {
         model.addAttribute("isAlreadyContains", isAlreadyContains);
         model.addAttribute("musics", musics);    
         model.addAttribute("playlists", playLists);
-        model.addAttribute("playListItem", playListItem);       
+        model.addAttribute("playListItem", playListItem);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
         return "musicList";
     }
 
@@ -64,13 +89,59 @@ public class MusicViewController {
         musicService.saveHistory(addHistory);        
 
         model.addAttribute("music", music);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
         return "music";
     }
 
+    // @GetMapping("/addHistoryInPlayList/{id}")
+    // public String postAddHistoryInPlayList(@PathVariable("id") int id) {
+    //     //TODO: process POST request
+    //     Music music = musicService.findById(id);
+    //     AddHistory addHistory = new AddHistory(music.getId(), musicService.getLoginId());
+    //     musicService.saveHistory(addHistory);  
+        
+    //     return "redirect:/";
+    // }
+    
+
+
     @GetMapping("/")
-    public String getMain() {
+    public String getMain(Model model, LoginMemberRequest loginMember) {
+        Boolean isLoginPage = true;
+        List<Member> members = musicService.findMembers().stream().toList();
+
+        int currentLoginId = musicService.getLoginId();
+
+        model.addAttribute("members", members);
+        model.addAttribute("isLoginPage", isLoginPage);
+        // 레이아웃에서 로그인한 사람의 id 를 받기 위해서..
+        model.addAttribute("loginMember", loginMember);
+        model.addAttribute("currentLoginId", currentLoginId);
+
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
+
         return "main";
     }
+
+    @PostMapping("/postLoginId")
+    public String postLoginId(@ModelAttribute("loginMember") LoginMemberRequest loginMember) {
+        //TODO: process POST request
+        
+        if (loginMember.getLoginId() == 0)
+        {
+            musicService.setLoginId(0);
+            musicService.setLoginName("");
+        }
+        else
+        {
+            musicService.setLoginId(loginMember.getLoginId());
+            String memberName = musicService.findMemberById(loginMember.getLoginId()).getName();
+            musicService.setLoginName(memberName);
+        }
+
+        return "redirect:/";
+    }
+    
 
     @GetMapping("/history")
     public String getHistory(Model model) {
@@ -78,10 +149,11 @@ public class MusicViewController {
         List<History> histories = musicService.findHistory().stream().toList().reversed();
 
         List<HistoryView> historyViews = new ArrayList<HistoryView>();
+
         
         // History 클래스의 musicId 와 memberId 를 통해 객체 넘겨주기..
         for (History history : histories) {
-            HistoryView historyView = new HistoryView(0, 0, getMain(), getMain(), getMain());
+            HistoryView historyView = new HistoryView(0, 0, "", "", "");
             historyView.setId(history.getId());
             historyView.setMusicId(history.getMusicId());
             historyView.setMusicTitle(musicService.findById(history.getMusicId()).getTitle());
@@ -91,8 +163,8 @@ public class MusicViewController {
             historyViews.add(historyView);
         }
 
-
         model.addAttribute("historyViews", historyViews);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
 
         return "history";
     }
@@ -101,11 +173,12 @@ public class MusicViewController {
     public String getPlayLists(Model model, PlayListRequest playListRequest) {
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
 
+
         List<PlayListMemberNameView> playListMemberNameViews = new ArrayList<PlayListMemberNameView>();
 
         // 플레이리스트 페이지에서 플레이리스트 이름, 플레이리스트 만든 사람 보여주기 위한 작업..
         for (PlayList playList : playLists) {
-            PlayListMemberNameView playListMemberNameView = new PlayListMemberNameView(0, getMain(), getMain());
+            PlayListMemberNameView playListMemberNameView = new PlayListMemberNameView(0, "asdf", "asdf");
             playListMemberNameView.setPlayListId(playList.getId());
             playListMemberNameView.setPlayListTitle(musicService.getPlayListById(playList.getId()).getTitle());
             playListMemberNameView.setMemberName(musicService.findMemberById(playList.getMemberId()).getName());
@@ -115,6 +188,7 @@ public class MusicViewController {
 
         model.addAttribute("playListMemberNameViews", playListMemberNameViews);
         model.addAttribute("playListRequest", playListRequest);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
 
         return "playList";
     }
@@ -154,6 +228,7 @@ public class MusicViewController {
 
         model.addAttribute("playList", playList);
         model.addAttribute("musics", musics);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
 
         return "playListPage";
     }
