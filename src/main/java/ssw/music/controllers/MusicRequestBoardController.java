@@ -14,8 +14,10 @@ public class MusicRequestBoardController {
 
     @GetMapping("/musicRequestBoard")
     public String getMusicRequestBoard(Model model) {
-
-
         return "musicRequestBoard";
+    }
+    @GetMapping("/musicRequestList")
+    public String getMusicRequestList(Model model) {
+        return "musicRequestList";
     }
 }

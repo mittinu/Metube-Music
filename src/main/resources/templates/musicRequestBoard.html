@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>Music Request Board</title>
@@ -11,6 +11,39 @@
     <div th:replace="layout"></div>
 </div>
 <div class="p-5 mb-5 text-center bg-dark text-warning">
+    <!-- Music Request Form -->
+    <div class="container">
+        <h2 class="mb-4 text-light">노래 요청</h2>
+        <form th:action="@{/music/request}" method="post" class="text-left">
+            <div class="form-group">
+                <label for="title" class="text-light">노래 제목</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="노래 제목을 입력하세요" required>
+            </div>
+            <div class="form-group">
+                <label for="artist" class="text-light">가수</label>
+                <input type="text" class="form-control" id="artist" name="artist" placeholder="가수 이름을 입력하세요" required>
+            </div>
+            <div class="form-group">
+                <label for="releaseDate" class="text-light">앨범 발매 일자</label>
+                <input type="date" class="form-control" id="releaseDate" name="releaseDate" required>
+            </div>
+            <div class="form-group">
+                <label for="genre" class="text-light">장르</label>
+                <select class="form-control" id="genre" name="genre" required>
+                    <option value="Pop">팝</option>
+                    <option value="Rock">록</option>
+                    <option value="Hip-hop">힙합</option>
+                    <option value="Jazz">재즈</option>
+                    <option value="Classical">클래식</option>
+                    <option value="Other">기타</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">요청 제출</button>
+        </form>
+    </div>
 </div>
+
+
+
 </body>
 </html>
