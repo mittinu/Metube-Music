@@ -14,18 +14,10 @@
     <!-- Requested Songs List -->
     <div class="container">
         <h2 class="mb-4 text-light">음악 요청 게시판</h2>
+        <ul >
+            <a href="/musicRequestDetail"><li th:each="musicRequest : ${musicRequests}" th:text="${musicRequest.albumTitle}"></li></a>
+        </ul>
         <a href="/musicRequestBoard" class="btn btn-primary mb-3">게시글 작성</a>
-        <div th:each="request : ${requests}">
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${request.albumTitle}">노래 제목</h5>
-                    <p class="card-text"><strong>가수:</strong> <span th:text="${request.artist}">가수 이름</span></p>
-                    <p class="card-text"><strong>앨범 발매 일자:</strong> <span th:text="${request.releaseDate}">발매 일자</span></p>
-                    <p class="card-text"><strong>장르:</strong> <span th:text="${request.genre}">장르</span></p>
-                    <button class="btn btn-success">추천 (<span th:text="${request.recommendations}">추천 수</span>)</button>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 </body>

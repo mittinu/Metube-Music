@@ -19,6 +19,8 @@ public class MusicRequestBoardController {
 
     @GetMapping("/musicRequestList")
     public String getMusicRequestList(Model model) {
+        List<MusicRequest> musicRequests = musicRequestService.findAll();
+        model.addAttribute("musicRequests", musicRequests);
         return "musicRequestList";
     }
 
@@ -27,8 +29,16 @@ public class MusicRequestBoardController {
         return "musicRequestBoard";
     }
 
+    @GetMapping("/musicRequestDetail")
+    public String getMusicRequestDetail(Model model) {
+        return "musicRequestDetail";
+    }
+
+
+
     @Autowired
     private MusicRequestService musicRequestService;
+
     @PostMapping("/musicRequest/")
     public String postMusicRequestBoard(@ModelAttribute MusicRequest musicRequest) {
         musicRequestService.saveMusicRequest(musicRequest);

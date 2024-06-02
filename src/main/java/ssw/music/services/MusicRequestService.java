@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import ssw.music.domain.MusicRequest;
 import ssw.music.repository.MusicRequestRepository;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class MusicRequestService {
@@ -15,5 +17,9 @@ public class MusicRequestService {
 
     public void saveMusicRequest(MusicRequest musicRequest) {
         musicRequestRepository.save(musicRequest);
+    }
+
+    public List<MusicRequest> findAll() {
+        return musicRequestRepository.findAll();
     }
 }
