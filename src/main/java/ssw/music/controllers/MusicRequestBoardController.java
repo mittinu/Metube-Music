@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import ssw.music.domain.History;
+import org.springframework.web.bind.annotation.*;
 import ssw.music.domain.MusicRequest;
 import ssw.music.services.MusicRequestService;
 
@@ -28,12 +25,6 @@ public class MusicRequestBoardController {
     public String getMusicRequestBoard(Model model) {
         return "musicRequestBoard";
     }
-
-    @GetMapping("/musicRequestDetail")
-    public String getMusicRequestDetail(Model model) {
-        return "musicRequestDetail";
-    }
-
 
 
     @Autowired

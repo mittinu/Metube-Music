@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import ssw.music.domain.MusicRequest;
+import ssw.music.dto.MusicRequestDto;
 import ssw.music.repository.MusicRequestRepository;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public class MusicRequestService {
 
     public List<MusicRequest> findAll() {
         return musicRequestRepository.findAll();
+    }
+
+    public static MusicRequestDto findById() {
+        return null;
     }
 }

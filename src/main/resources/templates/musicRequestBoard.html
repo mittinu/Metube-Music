@@ -10,6 +10,20 @@
     <h1 class="mb-3">Music Request Board</h1>
     <div th:replace="~{layout}"></div>
 </div>
+
+<!--mySQL에 다음과 같이 작성 -->
+<!--&#45;&#45; 'music_request' 테이블에서 모든 데이터를 조회합니다.-->
+<!--SELECT * FROM music_request;-->
+
+<!--&#45;&#45; music_request 테이블 생성-->
+<!--CREATE TABLE music_request (-->
+<!--id INT AUTO_INCREMENT PRIMARY KEY,-->
+<!--albumTitle VARCHAR(255) NOT NULL,-->
+<!--artist VARCHAR(255) NOT NULL,-->
+<!--releaseDate VARCHAR(255) NOT NULL,-->
+<!--genre VARCHAR(255) NOT NULL-->
+<!--);-->
+
 <div class="p-5 mb-5 text-center bg-dark text-warning">
     <!-- Music Request Form -->
     <div class="container">
@@ -42,8 +56,5 @@
         </form>
     </div>
 </div>
-
-
-
 </body>
 </html>

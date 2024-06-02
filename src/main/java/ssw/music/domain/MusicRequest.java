@@ -17,7 +17,7 @@ public class MusicRequest{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(255) DEFAULT '제목1'")
+    @Column(nullable = false)
     private String albumTitle;
 
     @Column(nullable = false)
