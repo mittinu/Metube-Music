@@ -6,18 +6,20 @@
     <title>Music List</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <script>
-        function showAudio() {
-            document.getElementById('playBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline-block';
-            document.getElementById('audio').style.display = 'inline-block';
-            document.getElementById('audio').play();
+        function showAudio(musicId) {
+            document.getElementById(`playBtn${musicId}`).style.display = 'none';
+            document.getElementById(`stopBtn${musicId}`).style.display = 'inline-block';
+            document.getElementById(`audio${musicId}`).style.display = 'inline-block';
+            document.getElementById(`audio${musicId}`).play();
+
+            fetch(`http://localhost:8080/addHistoryFromPlayList/${musicId}`);
         }
 
-        function hideAudio() {
-            document.getElementById('playBtn').style.display = 'inline-block';
-            document.getElementById('stopBtn').style.display = 'none';
-            document.getElementById('audio').style.display = 'none';
-            document.getElementById('audio').load();
+        function hideAudio(musicId) {
+            document.getElementById(`playBtn${musicId}`).style.display = 'inline-block';
+            document.getElementById(`stopBtn${musicId}`).style.display = 'none';
+            document.getElementById(`audio${musicId}`).style.display = 'none';
+            document.getElementById(`audio${musicId}`).load();
         }
     </script>
 </head>
@@ -35,15 +37,16 @@
                         <div class="col-9">
                             <h4 class="card-title text-warning" th:text="${music.title}"></h4>
                             <h5 class="card-text text-white" th:text="${music.artist}"></h5>
-                            <audio id="audio" controls="" style="display: none;">
+                            <audio th:id="|audio${music.id}|" controls="" style="display: none;">
+                                <input id="musicId" type="hidden" th:value="${music.id}"/>
                                 <source th:src="|/music${music.id}.mp3|">
                             </audio>
                         </div>
                         <div class="col-3">
-                            <button class="btn btn-primary" id="playBtn" onclick="showAudio()">
+                            <button class="btn btn-primary" th:id="|playBtn${music.id}|" th:onclick="showAudio([[${music.id}]])">
                                     <i class="bi bi-play-fill"></i> Play
                             </button>
-                            <button class="btn btn-primary" id="stopBtn" style="display: none;" onclick="hideAudio()">
+                            <button class="btn btn-primary" th:id="|stopBtn${music.id}|" style="display: none;" th:onclick="hideAudio([[${music.id}]])">
                                     <i class="bi bi-pause-fill"></i> Stop
                             </button>
                             <form th:action="@{/deleteplaylistitem/{playListId}/{musicId}(playListId = ${playList.id}, musicId = ${music.id})}" method="get">

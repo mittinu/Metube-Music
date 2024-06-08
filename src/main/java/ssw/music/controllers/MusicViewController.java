@@ -2,7 +2,6 @@ package ssw.music.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +16,10 @@ import ssw.music.domain.PlayList;
 import ssw.music.domain.PlayListItem;
 import ssw.music.dto.AddHistory;
 import ssw.music.dto.BestMusic;
-import ssw.music.dto.CurrentLoginMember;
 import ssw.music.dto.HistoryView;
 import ssw.music.dto.LoginMemberRequest;
 import ssw.music.dto.MusicListView;
 import ssw.music.dto.PlayListMemberNameView;
-import ssw.music.dto.PlayListMusic;
 import ssw.music.dto.PlayListRequest;
 import ssw.music.repository.MemberRepository;
 import ssw.music.repository.PlayListItemRepository;
@@ -30,8 +27,6 @@ import ssw.music.repository.PlayListRepository;
 import ssw.music.services.MusicService;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 @RequiredArgsConstructor
 @Controller
@@ -65,13 +60,11 @@ public class MusicViewController {
     
 
     @GetMapping("/musiclist")
-    public String getMusics(@RequestParam(value = "isAlreadyContains", required=false) String isAlreadyContains, Model model) {
-
+    public String getMusics(Model model) {        
         List<MusicListView> musics = musicService.findAll().stream().map(MusicListView::new).toList();
         List<PlayList> playLists = musicService.getPlayList().stream().toList();
         PlayListItem playListItem = new PlayListItem();
-        PlayListMusic playListMusic = new PlayListMusic();
-        model.addAttribute("isAlreadyContains", isAlreadyContains);
+
         model.addAttribute("musics", musics);    
         model.addAttribute("playlists", playLists);
         model.addAttribute("playListItem", playListItem);
@@ -94,15 +87,12 @@ public class MusicViewController {
         return "music";
     }
 
-    // @GetMapping("/addHistoryInPlayList/{id}")
-    // public String postAddHistoryInPlayList(@PathVariable("id") int id) {
-    //     //TODO: process POST request
-    //     Music music = musicService.findById(id);
-    //     AddHistory addHistory = new AddHistory(music.getId(), musicService.getLoginId());
-    //     musicService.saveHistory(addHistory);  
-        
-    //     return "redirect:/";
-    // }
+    @GetMapping("/addHistoryFromPlayList/{id}")
+    public void postAddHistoryInPlayList(@PathVariable("id") int id) {
+        Music music = musicService.findById(id);
+        AddHistory addHistory = new AddHistory(music.getId(), musicService.getLoginId());
+        musicService.saveHistory(addHistory);  
+    }
     
 
 
@@ -288,6 +278,4 @@ public class MusicViewController {
 
         return "redirect:/playlist/{id}";
     }
-    
-    
 }

@@ -12,9 +12,6 @@
         <h1 class="mb-3">Music List</h1>
         <div th:replace="layout"></div>
     </div>
-    <div>
-        <script th:if="${isAlreadyContains == 'true'}" src="script.js"></script>
-    </div>
     <div class="container">
         <div class="row-6" th:each="music : ${musics}">
             <div class="card-body border-bottom">

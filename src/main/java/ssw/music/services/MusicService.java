@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Optional;
 import java.util.HashMap;
-import java.util.Iterator;
-
 import ssw.music.domain.History;
 import ssw.music.domain.Member;
 import ssw.music.domain.Music;
@@ -126,39 +123,23 @@ public class MusicService {
             }
         }
 
-        for (int i = 0; i < 3; i++) {
+        // {"음악ID" : "재생횟수"} 로 된 historyCount Map 을 Value 값을 기준으로 정렬..
+        List<Integer> keySet = new ArrayList<>(historyCount.keySet());
 
-            if (historyCount.size() == 0)
-            {
-                break;
-            }
+        keySet.sort((n1, n2) -> historyCount.get(n1).compareTo(historyCount.get(n2)));
 
-            int maxCountMusicId = 0;
-
-            Iterator<Map.Entry<Integer, Integer>> iterator = historyCount.entrySet().iterator();
-
-            while (iterator.hasNext())
-            {
-                Map.Entry<Integer, Integer> entry = iterator.next();
-
-                if (maxCountMusicId == 0 || entry.getValue().compareTo(maxCountMusicId) > 0) {
-                    maxCountMusicId = entry.getKey();
-                }
-            }
-
+        for (Integer integer : keySet) {
             BestMusic bestMusic = new BestMusic();
-            bestMusic.setMusicId(maxCountMusicId);
-            bestMusic.setMusicTitle(musicRepository.findById(maxCountMusicId)
+            bestMusic.setMusicId(integer);
+            bestMusic.setMusicTitle(musicRepository.findById(integer)
             .orElseThrow(() -> new IllegalArgumentException("not found: ")).getTitle());
-            bestMusic.setArtist(musicRepository.findById(maxCountMusicId)
+            bestMusic.setArtist(musicRepository.findById(integer)
             .orElseThrow(() -> new IllegalArgumentException("not found: ")).getArtist());
 
             bestMusics.add(bestMusic);
-            
-            // 가장 높은거 삭제..
-            historyCount.remove(maxCountMusicId);
-        } 
+        }
 
-        return bestMusics;
+        // 상위 3개만 리턴..
+        return bestMusics.reversed().subList(0, 3);
     }
 }

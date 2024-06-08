@@ -7,13 +7,13 @@
 </head>
 <body class="bg-dark">
     <div class="p-5 mb-0 text-center bg-dark text-danger">
-        <h1 class="mb-3">Music</h1>
+        <h1 class="mb-3">Music</h1> 
         <div th:replace="layout"></div>
     </div>
     <div class="p-5 mb-5 text-center bg-dark text-warning">
         <h3>Title : <span th:text="${music.title}"></span></h3>
         <h4 style="margin-bottom: 50px;">Artist : <span th:text="${music.artist}"></span></h4>
-        <audio th:id="|music${music.id}|" controls="">
+        <audio autoplay th:id="|music${music.id}|" controls="">
             <source th:src="|/music${music.id}.mp3|">
         </audio>
     </div>
