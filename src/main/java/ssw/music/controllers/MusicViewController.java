@@ -35,7 +35,6 @@ public class MusicViewController {
     private final MusicService musicService;
     private final PlayListRepository playListRepository;
     private final PlayListItemRepository playListItemRepository;
-    private final MemberRepository memberRespository;
 
 
     @GetMapping("/playmusic")
@@ -139,8 +138,9 @@ public class MusicViewController {
 
     @GetMapping("/history")
     public String getHistory(Model model) {
-
+        // 여기
         List<History> histories = musicService.findHistory().stream().toList().reversed();
+
 
         List<HistoryView> historyViews = new ArrayList<HistoryView>();
 

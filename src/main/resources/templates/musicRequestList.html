@@ -27,11 +27,11 @@
                 </thead>
                 <tbody>
                 <tr th:each="req : ${musicRequests}">
-                    <td> [[${req.id}]] </td>
-                    <td>[[${req.albumTitle}]]</td>
-                    <td>[[${req.artist}]]</td>
-                    <td>[[${req.releaseDate}]]</td>
-                    <td>[[${req.genre}]]</td>
+                    <td th:text="${req.id}"></td>
+                    <td th:text="${req.albumTitle}"></td>
+                    <td th:text="${req.artist}"></td>
+                    <td th:text="${req.releaseDate}"></td>
+                    <td th:text="${req.genre}"></td>
                 </tr>
                 </tbody>
             </table>

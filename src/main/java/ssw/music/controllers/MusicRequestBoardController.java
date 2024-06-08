@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ssw.music.domain.MusicRequest;
 import ssw.music.services.MusicRequestService;
+import ssw.music.services.MusicService;
 
 import java.util.List;
 
@@ -14,15 +15,19 @@ import java.util.List;
 @Controller
 public class MusicRequestBoardController {
 
+    private final MusicService musicService;
+
     @GetMapping("/musicRequestList")
     public String getMusicRequestList(Model model) {
         List<MusicRequest> musicRequests = musicRequestService.findAll();
         model.addAttribute("musicRequests", musicRequests);
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
         return "musicRequestList";
     }
 
     @GetMapping("/musicRequestBoard")
     public String getMusicRequestBoard(Model model) {
+        model.addAttribute("currentLoginMember", musicService.getCurrentLoginMember());
         return "musicRequestBoard";
     }
 
