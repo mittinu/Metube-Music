@@ -128,6 +128,8 @@ public class MusicService {
 
         keySet.sort((n1, n2) -> historyCount.get(n1).compareTo(historyCount.get(n2)));
 
+        int num = 0;
+
         for (Integer integer : keySet) {
             BestMusic bestMusic = new BestMusic();
             bestMusic.setMusicId(integer);
@@ -136,10 +138,15 @@ public class MusicService {
             bestMusic.setArtist(musicRepository.findById(integer)
             .orElseThrow(() -> new IllegalArgumentException("not found: ")).getArtist());
 
+            num++;
+            if (num > 3) {
+                break;
+            }
+
             bestMusics.add(bestMusic);
         }
 
         // 상위 3개만 리턴..
-        return bestMusics.reversed().subList(0, 3);
+        return bestMusics.reversed();
     }
 }
